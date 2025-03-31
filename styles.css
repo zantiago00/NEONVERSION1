@@ -1,0 +1,224 @@
+/* Estilos Neón / Synthwave Grid */
+body, html {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    overflow: hidden; display: flex; justify-content: center; align-items: center;
+    /* Fondo negro */
+    background: #000000;
+    font-family: 'Courier New', Courier, monospace; /* Fuente más retro/tech */
+}
+
+#gameContainer {
+    width: 1600px; height: 800px;
+    position: relative; overflow: hidden;
+    /* Fondo negro con cuadrícula blanca semitransparente */
+    background-color: #000000;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px), /* Líneas horizontales */
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px); /* Líneas verticales */
+    background-size: 40px 40px; /* Tamaño de la cuadrícula */
+    /* Borde y brillo neón para el contenedor */
+    border: 3px solid #00ffff; /* Cyan */
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.7), 0 0 5px rgba(0, 255, 255, 0.5) inset;
+}
+
+#player {
+    width: 140px; height: 140px;
+    /* Fondo oscuro, borde y brillo neón */
+    background: rgba(10, 10, 10, 0.5); /* Ligeramente visible */
+    border: 4px solid #00ffff; /* Cyan */
+    box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff inset;
+    position: absolute; bottom: 0; left: 100px;
+    transition: transform 0.1s, border-color 0.3s, box-shadow 0.3s;
+    z-index: 5; box-sizing: border-box;
+}
+
+#player.powered {
+    /* Poder amarillo neón */
+    border-color: #ffff00; /* Amarillo */
+    box-shadow: 0 0 25px #ffff00, 0 0 35px #ffff00 inset, 0 0 10px #00ffff; /* Amarillo + base Cyan */
+}
+
+#player.jumping {
+    /* Podríamos intensificar el brillo al saltar */
+    box-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff inset, 0 0 5px #ffffff;
+}
+
+.obstacle {
+    /* Obstáculo magenta neón */
+    background: rgba(255, 0, 255, 0.3); /* Relleno semitransparente */
+    border: 4px solid #ff00ff; /* Magenta */
+    box-shadow: 0 0 8px #ff00ff, 0 0 15px #ff00ff inset;
+    width: 62px; height: 62px;
+    position: absolute; bottom: 0;
+    z-index: 4; box-sizing: border-box;
+}
+
+.obstacle.large {
+    width: 74px; height: 74px;
+}
+
+.coin {
+    width: 50px; height: 50px; border-radius: 50%;
+    position: absolute; display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 18px;
+    color: #000000; /* Texto negro para contraste con fondo neón */
+    /* Sombra/brillo definido por tipo */
+    z-index: 4;
+    border: 2px solid rgba(0, 0, 0, 0.5); /* Borde oscuro sutil */
+}
+
+.coin.green {
+    background: #00ff00; /* Verde Neón */
+    box-shadow: 0 0 12px #00ff00, 0 0 5px #ffffff inset;
+}
+.coin.blue {
+    background: #0077ff; /* Azul Eléctrico */
+    box-shadow: 0 0 12px #0077ff, 0 0 5px #ffffff inset;
+}
+.coin.yellow {
+    background: #ffff00; /* Amarillo Neón */
+    box-shadow: 0 0 12px #ffff00, 0 0 5px #ffffff inset;
+    animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+    from { transform: scale(1); box-shadow: 0 0 12px currentColor, 0 0 5px #ffffff inset; }
+    to { transform: scale(1.1); box-shadow: 0 0 20px currentColor, 0 0 10px #ffffff inset; }
+}
+
+#score, #timer, #combo {
+    position: absolute; top: 20px;
+    /* Fondo oscuro semitransparente, borde y texto blanco */
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 25px;
+    border: 2px solid #ffffff;
+    font-size: 28px; color: #ffffff;
+    font-weight: bold; border-radius: 8px; z-index: 10;
+    min-width: 150px; text-align: center;
+    /* Sombra de texto para efecto neón */
+    text-shadow: 0 0 5px #ffffff, 0 0 10px rgba(255, 255, 255, 0.5);
+}
+#score { right: 20px; }
+#timer { left: 20px; }
+#combo { left: 50%; transform: translateX(-50%); }
+
+.screen { /* Pantallas de inicio y fin */
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    /* Fondo negro semitransparente */
+    background: rgba(0, 0, 0, 0.9);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: 'Courier New', Courier, monospace; /* Mantener fuente */
+    z-index: 20; text-align: center; padding: 20px; box-sizing: border-box;
+    color: #ffffff; /* Texto blanco por defecto */
+}
+.screen h1 {
+    font-size: 54px; margin-bottom: 20px;
+    color: #00ffff; /* Título en Cyan */
+    text-shadow: 0 0 8px #00ffff, 0 0 15px rgba(0, 255, 255, 0.7);
+}
+.screen p {
+    font-size: 20px; margin-bottom: 25px; line-height: 1.6; max-width: 600px;
+    color: #dddddd; /* Texto ligeramente más tenue */
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+}
+/* Hacer que los spans de colores en la descripción resalten más */
+.screen p span[style*="color:#c62828"] { color: #ff0000; font-weight: bold; text-shadow: 0 0 5px #ff0000;}
+.screen p span[style*="color:#2e7d32"] { color: #00ff00; font-weight: bold; text-shadow: 0 0 5px #00ff00;}
+.screen p span[style*="color:#0055cc"] { color: #0077ff; font-weight: bold; text-shadow: 0 0 5px #0077ff;}
+.screen p span[style*="color:#cc8800"] { color: #ffff00; font-weight: bold; text-shadow: 0 0 5px #ffff00;}
+
+
+.screen button {
+    padding: 18px 40px; font-size: 26px;
+    background: #000000; /* Fondo negro */
+    color: #00ff00; /* Texto Verde Neón */
+    border: 3px solid #00ff00; /* Borde Verde Neón */
+    box-shadow: 0 0 10px #00ff00, 0 0 5px #00ff00 inset;
+    border-radius: 8px; cursor: pointer; margin-top: 15px;
+    transition: all 0.3s ease; /* Transición general */
+    font-weight: bold;
+}
+.screen button:hover {
+    background: #00ff00; /* Fondo Verde Neón */
+    color: #000000; /* Texto negro */
+    box-shadow: 0 0 15px #00ff00, 0 0 25px #00ff00, 0 0 10px #ffffff inset;
+}
+.screen button:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 5px #00ff00, 0 0 2px #00ff00 inset;
+}
+ .screen input {
+    font-size: 20px; padding: 10px 15px; margin-bottom: 10px;
+    border: 2px solid #00ffff; /* Borde Cyan */
+    background-color: #000000; /* Fondo negro */
+    color: #00ffff; /* Texto Cyan */
+    border-radius: 5px; width: 280px; text-align: center;
+    box-shadow: 0 0 5px #00ffff inset;
+ }
+ /* Estilo para el placeholder */
+ .screen input::placeholder {
+    color: #007777; /* Cyan más oscuro */
+    opacity: 0.8;
+ }
+
+.floating-text {
+    position: absolute; font-size: 28px; font-weight: bold;
+    animation: float 1.2s forwards ease-out; z-index: 99; pointer-events: none;
+    /* Sombra definida por clase plus/minus */
+}
+@keyframes float {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-80px) scale(0.8); opacity: 0; }
+}
+.plus {
+    color: #00ff00; /* Verde Neón */
+    text-shadow: 0 0 5px #00ff00, 0 0 8px #ffffff;
+}
+.minus {
+    color: #ff0000; /* Rojo Neón */
+    text-shadow: 0 0 5px #ff0000, 0 0 8px #ffffff;
+}
+
+/* Estilos para el Ranking (adaptados al tema neón) */
+#ranking {
+    margin-top: 20px; font-size: 16px;
+    max-height: 350px; overflow-y: auto; width: 80%; max-width: 500px;
+    border: 1px solid #444; /* Borde gris oscuro */
+    padding: 10px;
+    background-color: rgba(10, 10, 10, 0.85); /* Fondo casi negro translúcido */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1) inset;
+}
+#ranking h2 {
+    font-size: 22px; margin-bottom: 10px; text-align: center;
+    color: #ffffff; /* Blanco */
+    text-shadow: 0 0 5px #ffffff;
+}
+#ranking table { width: 100%; border-collapse: collapse; }
+#ranking th, #ranking td {
+    border: 1px solid #333; /* Borde gris muy oscuro */
+    padding: 8px 10px; text-align: left;
+    color: #cccccc; /* Texto gris claro */
+}
+ #ranking th:first-child, #ranking td:first-child,
+ #ranking th:last-child, #ranking td:last-child {
+    text-align: center;
+    width: 15%;
+ }
+ #ranking th:nth-child(2), #ranking td:nth-child(2) {
+    width: 70%;
+ }
+#ranking th { /* Encabezados de tabla */
+    background-color: #1a1a1a; /* Gris muy oscuro */
+    color: #00ffff; /* Cyan */
+    text-shadow: 0 0 4px #00ffff;
+    position: sticky; top: 0;
+}
+ #ranking tr:nth-child(even) { /* Filas alternas */
+     background-color: rgba(30, 30, 30, 0.7); /* Gris oscuro translúcido */
+ }
+ #ranking tr:hover td { /* Efecto hover en filas */
+    background-color: rgba(0, 255, 255, 0.1);
+    color: #ffffff;
+ }
