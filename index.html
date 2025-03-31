@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cuadrado Saltarín Combo + Ranking</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="player"></div>
+        <div id="score">0</div>
+        <div id="timer">120.0</div>
+        <div id="combo">Combo: 0</div>
+
+        <div id="startScreen" class="screen">
+            <h1>¡Cuadrado Saltarín Combo!</h1>
+              <p>
+                  <b>Espacio</b> para Saltar | Evita Obstáculos (<span style="color:#c62828">-1s</span>)<br>
+                  Recoge Monedas:<br>
+                  <span style="color:#2e7d32">Verde</span>: +1s | <span style="color:#0055cc">Azul</span>: +2s & Velocidad (Combo 3+) | <span style="color:#cc8800">Amarilla</span>: +5s, Velocidad & Doble Salto Persistente (Combo 6+)
+              </p>
+            <input id="playerName" type="text" placeholder="Ingresa tu nombre (Max 15)" maxlength="15">
+            <button id="startButton">¡JUGAR!</button>
+        </div>
+
+         <div id="rankingDisplay" class="screen" style="display:none;">
+              <h1>¡Tiempo Agotado!</h1>
+               <p id="finalScoreText"></p>
+               <div id="ranking"></div>
+               <button onclick="location.reload()">JUGAR DE NUEVO</button>
+         </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
